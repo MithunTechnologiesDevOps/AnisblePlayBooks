@@ -1,0 +1,28 @@
+---
+- hosts: localhost
+  #gather_facts: no
+  become: yes
+  tasks:
+  - name: Install Apache HTTP server on RedHat Server
+    yum: 
+      name: httpd
+      state: present
+    when: ansible_os_family == "RedHat"
+  - name: Install Apache HTTP server on Ubuntu server
+    apt:
+      name: apache2
+      state: present
+    when: ansible_os_family == "Debian"
+  - name: Install Apache HTTP server on CentOS server
+    yum: 
+      name: httpd
+      state: present
+    when: 
+      - ansible_facts['distribution'] == "CentOS"
+      - ansible_facts['distribution_major_version'] == "6"
+  - name: Shutdown CentOS 6 and Debian 7 Servers
+    command: /sbin/shutdown -t now
+    when: (ansible_facts['distribution'] == "CentOS" and ansible_facts['distribution_major_version'] == "6") or
+          (ansible_facts['distribution'] == "Debian" and ansible_facts['distribution_major_version'] == "7")
+
+#https://docs.ansible.com/ansible/latest/user_guide/playbooks_conditionals.html

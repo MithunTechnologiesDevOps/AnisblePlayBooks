@@ -1,0 +1,14 @@
+#This playbbok will install git,maven,ant
+---
+- hosts: localhost
+  become: true
+  tasks:
+	- name: Install a list of packages
+	  yum:
+	    name:
+	      - git
+	      - maven
+	      - ant
+	    state: present
+...
+

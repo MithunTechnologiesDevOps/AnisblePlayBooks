@@ -1,0 +1,9 @@
+# Loop feature will be removed in version 2.11
+---
+- hosts: localhost
+  become: true
+  tasks:
+   - name: Install list of packages
+     yum:
+      name: ['httpd', 'wget', 'vim', 'zip', 'unzip']
+...

@@ -1,0 +1,9 @@
+#This playbbok will install HTTP server and will not start the server.
+
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Install Apache HTTP server
+      yum: name=httpd update_cache=yes state=latest
+...

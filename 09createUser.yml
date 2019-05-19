@@ -1,0 +1,11 @@
+---
+ - hosts: all
+   become: true
+   tasks:
+    - name: Create User
+      user:
+       name=manan
+       password=Tekulodu
+       groups=wheel
+       shell=/bin/bash
+...

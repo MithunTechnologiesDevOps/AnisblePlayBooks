@@ -1,0 +1,17 @@
+#This playbbok will install vim,unzip,zip,wget
+---
+- hosts: localhost
+  become: true
+  vars:
+      packages:
+        - vim
+        - unzip
+        - zip
+        - wget
+        - git
+      state: latest
+  tasks:
+    - name: Install vim,unzip,zip,wget
+      yum:
+      name: "{{ packages }}"
+...

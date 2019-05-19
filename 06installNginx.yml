@@ -1,0 +1,14 @@
+---
+ - hosts: all
+   become: true
+   tasks:
+     - name: Add epel-release repo
+       yum:
+         name: epel-release
+         state: present
+     - name: Install nginx server
+       yum: name=nginx state=present
+ 
+     - name: Start nginx server  
+       service: name=nginx enabled=yes state=started
+...

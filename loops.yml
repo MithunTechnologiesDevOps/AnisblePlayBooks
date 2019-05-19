@@ -1,0 +1,10 @@
+- hosts: all
+  become: yes
+
+  tasks:
+   - name: Install Packages
+     yum: name={{ item }} update_cache=yes state=latest
+     with_items:
+       - vim
+       - lsof
+       - nano

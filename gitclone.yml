@@ -1,0 +1,9 @@
+- hosts: localhost
+  become: yes
+  tasks:
+   - name: Install Git
+     yum: name=git state=present
+   - name: git clone
+     git:
+      repo: 'https://github.com/devopstrainingbanglore/gradle-web-app.git'
+      dest: /home/ansible/gradle-web-app
