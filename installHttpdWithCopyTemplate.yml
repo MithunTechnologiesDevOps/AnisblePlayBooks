@@ -1,0 +1,22 @@
+- hosts: appServers
+  become: true
+  tasks:
+  - name: Install httpd
+    yum:
+      name: httpd
+      state: present
+  - name: Copy httpd.conf
+    template:
+      src: httpd.conf.j2
+      dest: /etc/httpd/conf/httpd.conf
+    notify:
+    - Restart httpd
+  - name: Copy index.html
+    copy:
+      src: index.html
+      dest: /var/www/html
+  handlers:
+  - name: Restart httpd
+    service:
+      name: httpd
+      state: restarted  
