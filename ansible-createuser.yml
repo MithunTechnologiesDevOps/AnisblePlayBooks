@@ -1,3 +1,5 @@
+# ansible 172.31.39.35 -m ping -u ubuntu --private-key=~/devops.pem
+# ansible-playbook -b ansible-createuser.yml -u ubuntu --private-key=~/devops.pem
 - hosts: all
   tasks:
   - name: Create Ansible User
