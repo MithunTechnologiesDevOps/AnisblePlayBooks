@@ -1,6 +1,6 @@
 - hosts: all
   tasks:
-  - name: Create Devops User
+  - name: Create Ansible User
     user:
       name: ansible
       create_home: true
@@ -14,7 +14,7 @@
       state: present
       manage_dir: true
       key: "{{ lookup('file', '/home/ansible/.ssh/id_rsa.pub') }}"
-  - name: Setup Sudo Access for Devops User
+  - name: Setup Sudo Access for Ansible User
     copy:
       dest: /etc/sudoers.d/ansible
       content: 'ansible ALL=(ALL) NOPASSWD: ALL' 
