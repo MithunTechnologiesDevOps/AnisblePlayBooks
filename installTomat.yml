@@ -1,0 +1,72 @@
+- hosts: tomcatServers
+  become: true
+  tasks:
+    - name: Install Java
+      yum:
+        name: java-1.8.0-openjdk
+        state: present
+    - name: add tomcatuser
+      user:
+        name: tomcat
+        shell: /sbin/nologin
+    - name: get_installer
+      get_url:
+        url: https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.76/bin/apache-tomcat-7.0.76.tar.gz
+        dest: /tmp/
+    - name: copy
+      copy:
+        src: /tmp/apache-tomcat-7.0.76.tar.gz
+        dest: /usr/local/
+        remote_src: yes
+    - name: install
+      unarchive:
+        src: /usr/local/apache-tomcat-7.0.76.tar.gz
+        dest: /usr/local
+        remote_src: yes
+    - name: Change file ownership, group and permissions
+      file:
+        path: /usr/local/apache-tomcat-7.0.76
+        owner: tomcat
+        group: tomcat
+        recurse: yes
+        state: directory
+    - name: make tomcat symbolic
+      file:
+        src: /usr/local/apache-tomcat-7.0.76
+        dest: /usr/local/tomcat7
+        owner: tomcat
+        group: tomcat
+        state: link
+    - name: make tomcat.service
+      file:
+        path: /etc/systemd/system/tomcat.service
+        state:  touch
+    - name: edit tomcat.service
+      blockinfile:
+        dest: /etc/systemd/system/tomcat.service
+        insertafter:
+        block: |
+          [Unit]
+          Description = Apache Tomcat 7
+          After = syslog.target network.target
+          [Service]
+          User = tomcat
+          Group = tomcat
+          Type = oneshot
+          PIDFile =/usr/local/apache-tomcat-7.0.76/tomcat.pid
+          RemainAfterExit = yes
+          ExecStart =/usr/local/apache-tomcat-7.0.76/bin/startup.sh
+          ExecStop =/usr/local/apache-tomcat-7.0.76/bin/shutdown.sh
+          ExecReStart =/usr/local/apache-tomcat-7.0.76/bin/shutdown.sh;/usr/local/apache-tomcat-7.0.76/bin/startup.sh
+          [Install]
+          WantedBy = multi-user.target
+    - name: chmod 755 tomcat.service
+      file:
+        path: /etc/systemd/system/tomcat.service
+        mode:  0755
+    - name: start tomcat
+      systemd:
+        name: tomcat.service
+        state: started
+        daemon_reload: yes
+        enabled: yes
