@@ -1,4 +1,4 @@
-- hosts: tomcatServers
+- hosts: ec2
   become: true
   tasks:
     - name: Install Java
