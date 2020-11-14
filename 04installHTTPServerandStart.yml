@@ -1,6 +1,6 @@
 #This playbbok will install HTTP server and start the server.
 ---
-- hosts: all
+- hosts: appServers
   become: true
   tasks:
     - name: Install Apache HTTP server
