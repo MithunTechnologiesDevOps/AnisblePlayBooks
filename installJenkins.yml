@@ -1,54 +1,44 @@
----
-- hosts: appServers
-  gather_facts: false
-  become: true
+- hosts: jenkinsServer
+  become: yes
   tasks:
-
-  - name: install wget
-    yum:
-     name: wget
-     state: present
-
-  - name: install openjdk
-    yum:
-     name: java-1.8.0-openjdk
-     state: present
-
-  - name: download jenkins.repo
+  - name: Download Long Term Jenkins release
     get_url:
-     url: http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo
-     dest: /etc/yum.repos.d/jenkins.repo
-
-  - name: import jenkins key
-    rpm_key:
-     state: present
-     key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
-
-  - name: install jenkins
+      url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+      dest: /etc/yum.repos.d/jenkins.repo
+  - name: Import jenkins key from url
+    ansible.builtin.rpm_key:
+      state: present
+      key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+  - name: Install java
     yum:
-     name: jenkins
-     state: present
-
-  - name: start jenkins
-    systemd:
-     name: jenkins
-     state: started
-
+      name: java-11-openjdk-devel
+      state: present
+  - name: Install Epel Relaase which has daemonize  dependency which is required for Jenkins.
+    yum:
+      name: https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+      state: present
+      disable_gpg_check: true
+  - name: Install jenkins
+    yum:
+      name: jenkins
+      state: latest
+      skip_broken: yes
+  - name: Start Jenkins
+    service:
+      name: jenkins
+      state: started
   - name: enable jenkins
     systemd:
      name: jenkins
      enabled: true
-
   - name: sleep for 30 seconds and continue with play
     wait_for:
      delay: 30
      port: 8080
-
   - name: init password jenkin
     shell: cat /var/lib/jenkins/secrets/initialAdminPassword
     changed_when: false
     register: result
-
   - name: print init password jenkins
     debug:
      var: result.stdout
