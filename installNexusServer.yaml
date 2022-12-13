@@ -1,0 +1,71 @@
+- hosts: nexusservers
+  become: true
+  gather_facts: no
+  tasks:
+   - name: Install Java 1.8
+     yum:
+      name: java-1.8.0-openjdk
+      state: present
+   - name: Install tar Package
+     yum:
+      name: tar
+      state: present
+   - name: Download nexus software
+     get_url:
+      url: https://download.sonatype.com/nexus/3/nexus-3.43.0-01-unix.tar.gz
+      dest: /opt/
+   - name: Extract Nexus Software
+     unarchive:
+      src: /opt/nexus-3.43.0-01-unix.tar.gz
+      dest: /opt/
+      remote_src: yes
+   - name: Rename the nexus directory
+     shell:
+      mv /opt/nexus-3.43.0-01 /opt/nexus/
+   - name: Create the nexus user
+     user:
+      name: nexus
+      create_home: true
+      shell: /bin/bash
+      comment: "Nexus Management Account"
+      expires: -1
+      password: "{{ 'nexus' | password_hash('sha512','A512') }}"
+   - name: Setup Sudo Access for nexus User
+     copy:
+      dest: /etc/sudoers.d/nexus
+      content: 'nexus ALL=(ALL) NOPASSWD: ALL'
+      validate: /usr/sbin/visudo -cf %s
+   - name: Change owner and group and permissions to /opt/nexus/
+     file:
+      path: /opt/nexus/
+      owner: nexus
+      group: nexus
+      mode: 0775
+      recurse: yes
+      state: directory
+   - name: Change owner and group and permissions to /opt/sonatype-work
+     file:
+      path: /opt/sonatype-work/
+      group: nexus
+      owner: nexus
+      mode: 0775
+      recurse: yes
+      state: directory
+   - name: Set the run_as_user parameter in nexus.rc
+     lineinfile:
+      dest: /opt/nexus/bin/nexus.rc
+      regexp: "#run_as_user="
+      line: "run_as_user=nexus"
+      backrefs: true
+   - name: Create soft link for nexus
+     file:
+      src: /opt/nexus/bin/nexus
+      dest: /etc/init.d/nexus
+      state: link
+   - name: Start nexus service
+     systemd:
+      name: nexus
+      state: started
+      daemon_reload: yes
+      enabled: yes
+...
