@@ -6,10 +6,6 @@
      yum:
       name: java-1.8.0-openjdk
       state: present
-   - name: Install tar Package
-     yum:
-      name: tar
-      state: present
    - name: Download nexus software
      get_url:
       url: https://download.sonatype.com/nexus/3/nexus-3.43.0-01-unix.tar.gz
