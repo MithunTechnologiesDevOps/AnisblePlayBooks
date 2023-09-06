@@ -3,7 +3,7 @@
   tasks:
     - name: Install Java
       yum:
-        name: java-1.8.0-openjdk
+        name: java-1.8.0-amazon-corretto-devel
         state: present
     - name: add tomcatuser
       user:
@@ -11,29 +11,29 @@
         shell: /sbin/nologin
     - name: Tomcat-9 Installation
       get_url:
-        url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.70/bin/apache-tomcat-9.0.70.tar.gz
+        url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.80/bin/apache-tomcat-9.0.80.tar.gz
         dest: /tmp/
     - name: copy
       copy:
-        src: /tmp/apache-tomcat-9.0.70.tar.gz
+        src: /tmp/apache-tomcat-9.0.80.tar.gz
         dest: /usr/local/
         remote_src: yes
     - name: Unpacking the archive
       unarchive:
-        src: /usr/local/apache-tomcat-9.0.70.tar.gz
+        src: /usr/local/apache-tomcat-9.0.80.tar.gz
         dest: /usr/local
         remote_src: yes
     - name: Change file ownership, group and permissions
       file:
-        path: /usr/local/apache-tomcat-9.0.70
+        path: /usr/local/apache-tomcat-9.0.80
         owner: tomcat
         group: tomcat
         recurse: yes
         state: directory
     - name: make tomcat symbolic link
       file:
-        src: /usr/local/apache-tomcat-9.0.70
-        dest: /usr/local/tomcat7
+        src: /usr/local/apache-tomcat-9.0.80
+        dest: /usr/local/tomcat9
         owner: tomcat
         group: tomcat
         state: link
@@ -53,11 +53,11 @@
           User = tomcat
           Group = tomcat
           Type = oneshot
-          PIDFile =/usr/local/apache-tomcat-9.0.70/tomcat.pid
+          PIDFile =/usr/local/apache-tomcat-9.0.80/tomcat.pid
           RemainAfterExit = yes
-          ExecStart =/usr/local/apache-tomcat-9.0.70/bin/startup.sh
-          ExecStop =/usr/local/apache-tomcat-9.0.70/bin/shutdown.sh
-          ExecReStart =/usr/local/apache-tomcat-9.0.70/bin/shutdown.sh;/usr/local/apache-tomcat-10.0.27/bin/startup.sh
+          ExecStart =/usr/local/apache-tomcat-9.0.80/bin/startup.sh
+          ExecStop =/usr/local/apache-tomcat-9.0.80/bin/shutdown.sh
+          ExecReStart =/usr/local/apache-tomcat-9.0.80/bin/shutdown.sh;/usr/local/apache-tomcat-9.0.80/bin/startup.sh
           [Install]
           WantedBy = multi-user.target
     - name: chmod 755 tomcat.service
