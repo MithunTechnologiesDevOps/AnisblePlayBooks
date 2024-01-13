@@ -11,28 +11,28 @@
         shell: /sbin/nologin
     - name: Tomcat-9 Installation
       get_url:
-        url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.80/bin/apache-tomcat-9.0.80.tar.gz
+        url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.85/bin/apache-tomcat-9.0.85.tar.gz
         dest: /tmp/
     - name: copy
       copy:
-        src: /tmp/apache-tomcat-9.0.80.tar.gz
+        src: /tmp/apache-tomcat-9.0.85.tar.gz
         dest: /usr/local/
         remote_src: yes
     - name: Unpacking the archive
       unarchive:
-        src: /usr/local/apache-tomcat-9.0.80.tar.gz
+        src: /usr/local/apache-tomcat-9.0.85.tar.gz
         dest: /usr/local
         remote_src: yes
     - name: Change file ownership, group and permissions
       file:
-        path: /usr/local/apache-tomcat-9.0.80
+        path: /usr/local/apache-tomcat-9.0.85
         owner: tomcat
         group: tomcat
         recurse: yes
         state: directory
     - name: make tomcat symbolic link
       file:
-        src: /usr/local/apache-tomcat-9.0.80
+        src: /usr/local/apache-tomcat-9.0.85
         dest: /usr/local/tomcat9
         owner: tomcat
         group: tomcat
