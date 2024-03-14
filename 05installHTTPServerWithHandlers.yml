@@ -1,6 +1,6 @@
 #This play book will explains handlers as well.
 ---
-- hosts: all
+- hosts: appservers
   become: true
   tasks:
     - name: Install Apache HTTP Server
