@@ -1,0 +1,14 @@
+---
+- name: Play -  Create Multiple Directories
+  hosts: all
+  tasks:
+    - name: Create multiple directories in host machines
+      file:
+        path: "/home/ansible/{{item}}"
+        state: directory
+      with_items:
+        - bhaskar
+        - mithun
+        - manan
+        - mithuntechnologies
+...
