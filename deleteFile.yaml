@@ -1,0 +1,9 @@
+---
+- name: Play -  Delete a File
+  hosts: all
+  tasks:
+    - name: Deleting a file
+      file:
+        path: /home/ansible/bhaskar.txt
+        state: absent
+... 
