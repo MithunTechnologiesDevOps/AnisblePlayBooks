@@ -1,0 +1,12 @@
+---
+- name:
+  hosts: all
+  tasks:
+    - name: Gather Host Machines/Servers Facts
+      setup:
+    - name: Get All the Host Machines OS Deatils
+      debug:
+        var: ansible_distribution
+...
+#Here no need to use setup module.. even if you dont use also it will work.
+#use gather_facts: no and see what error you will get .
