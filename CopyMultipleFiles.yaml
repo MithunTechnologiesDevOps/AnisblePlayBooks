@@ -1,0 +1,13 @@
+---
+- name: Copy Multiple Files
+  hosts: all
+  tasks:
+    - name: Copy multiple files to host machines/servers
+      copy:
+        src: "{{item.src}}"
+        dest: "{{item.dest}}"
+      with_items:
+        - { src: "handlersdemo.yaml", dest: "/tmp/handlersdemo.yaml" }
+        - { src: "index.html", dest: "/tmp/index.html" }
+        - { src: "installJava.yaml", dest: "/tmp/installJava.yaml" }
+...
