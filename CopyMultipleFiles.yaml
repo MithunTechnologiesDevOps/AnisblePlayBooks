@@ -11,3 +11,23 @@
         - { src: "index.html", dest: "/tmp/index.html" }
         - { src: "installJava.yaml", dest: "/tmp/installJava.yaml" }
 ...
+
+(OR)
+
+
+---
+- hosts: all
+  gather_facts: no
+  tasks: 
+   - name: Copy multiple files 
+     copy:
+      src: "/tmp/{{item}}"
+      dest: /tmp/devops/
+     with_items:
+       - bhaskar.txt
+       - mithun.txt
+       - manan.txt
+       - mithuntechnologies.txt
+       - devops.txt
+       - aws.txt
+...
