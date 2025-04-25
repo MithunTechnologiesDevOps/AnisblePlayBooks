@@ -3,7 +3,7 @@
   tasks:
     - name: Install Java
       yum:
-        name: java-1.8.0-openjdk
+        name: java-17-openjdk
         state: present
     - name: add tomcatuser
       user:
@@ -11,28 +11,28 @@
         shell: /sbin/nologin
     - name: Tomcat-10 Installation
       get_url:
-        url: https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.8/bin/apache-tomcat-10.1.8.tar.gz
+        url: https://dlcdn.apache.org/tomcat/tomcat-10/v10.1.40/bin/apache-tomcat-10.1.40.tar.gz
         dest: /tmp/
     - name: copy
       copy:
-        src: /tmp/apache-tomcat-10.1.8.tar.gz
+        src: /tmp/apache-tomcat-10.1.40.tar.gz
         dest: /usr/local/
         remote_src: yes
     - name: Unpacking the archive
       unarchive:
-        src: /usr/local/apache-tomcat-10.1.8.tar.gz
+        src: /usr/local/apache-tomcat-10.1.40.tar.gz
         dest: /usr/local
         remote_src: yes
     - name: Change file ownership, group and permissions
       file:
-        path: /usr/local/apache-tomcat-10.1.8
+        path: /usr/local/apache-tomcat-10.1.40
         owner: tomcat
         group: tomcat
         recurse: yes
         state: directory
     - name: make tomcat symbolic link
       file:
-        src: /usr/local/apache-tomcat-10.1.8
+        src: /usr/local/apache-tomcat-10.1.40
         dest: /usr/local/tomcat7
         owner: tomcat
         group: tomcat
@@ -53,11 +53,11 @@
           User = tomcat
           Group = tomcat
           Type = oneshot
-          PIDFile =/usr/local/apache-tomcat-10.1.8/tomcat.pid
+          PIDFile =/usr/local/apache-tomcat-10.1.40/tomcat.pid
           RemainAfterExit = yes
-          ExecStart =/usr/local/apache-tomcat-10.1.8/bin/startup.sh
-          ExecStop =/usr/local/apache-tomcat-10.1.8/bin/shutdown.sh
-          ExecReStart =/usr/local/apache-tomcat-10.1.8/bin/shutdown.sh;/usr/local/apache-tomcat-10.1.8/bin/startup.sh
+          ExecStart =/usr/local/apache-tomcat-10.1.40/bin/startup.sh
+          ExecStop =/usr/local/apache-tomcat-10.1.40/bin/shutdown.sh
+          ExecReStart =/usr/local/apache-tomcat-10.1.40/bin/shutdown.sh;/usr/local/apache-tomcat-10.1.8/bin/startup.sh
           [Install]
           WantedBy = multi-user.target
     - name: chmod 755 tomcat.service
