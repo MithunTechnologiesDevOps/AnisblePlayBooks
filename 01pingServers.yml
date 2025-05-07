@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  gather_facts: no
+  gather_facts: yes
   remote_user: ansible
   tasks:
     - name: Test connection
